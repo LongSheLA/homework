@@ -43,6 +43,13 @@ public interface  UserService {
      */
      Page<User> findUserByQuery(Integer page, Integer size, UserQuery userQuery);
 
+    /**
+     * 根据用户查询用户
+     * @param name
+     * @return
+     */
+    User verfiyUser(String name);
+
 
 
 

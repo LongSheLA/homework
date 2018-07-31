@@ -1,18 +1,24 @@
 package com.advantech.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "device_info")
-public class Device extends IdEntity{
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
+public class Device extends IdEntity implements Serializable {
 
+
+    private static final long serialVersionUID = 4603642343377807741L;
     /**
      * 设备ID
      */
@@ -36,7 +42,6 @@ public class Device extends IdEntity{
     /**
      * 每个设备下的用户列表
      */
-
     private List<User> userList;
 
     public String getDeviceID() {

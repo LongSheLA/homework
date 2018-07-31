@@ -38,4 +38,13 @@ public class ResponseDto {
     public void setData(Object data) {
         this.data = data;
     }
+
+    public ResponseDto() {
+    }
+
+    public ResponseDto(String code, String errorMessage, Object data) {
+        this.code = code;
+        this.errorMessage = errorMessage;
+        this.data = data;
+    }
 }

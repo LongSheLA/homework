@@ -6,6 +6,7 @@ import com.advantech.homework.entity.User;
 import com.advantech.homework.entity.UserQuery;
 import com.advantech.homework.service.DeviceService;
 import com.advantech.homework.service.UserService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private DeviceService deviceService;
-
     @RequestMapping(path = "getAllUser",method = RequestMethod.GET)
-    public ResponseEntity<?> getAllUser(){
+    public String getAllUser(){
         ResponseDto responseDto = new ResponseDto();
         ResponseEntity<?> responseEntity = null;
         List<User> allUser = userService.getAllUser();
@@ -32,24 +30,43 @@ public class UserController {
         responseDto.setErrorMessage("");
         responseDto.setData(allUser);
         responseEntity = new ResponseEntity<>(responseDto,HttpStatus.OK);
-        return responseEntity;
+        String s = JSONObject.toJSONString(responseEntity.getBody());
+        return s;
     }
 
     @RequestMapping(path = "saveUser",method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody User user){
+    public String  saveUser(@RequestBody User user){
         ResponseDto responseDto = new ResponseDto();
         ResponseEntity<?> responseEntity = null;
+        user.setPassword("123456");
         User user1 = userService.savaUser(user);
         responseDto.setCode("0");
         responseDto.setErrorMessage("");
         responseDto.setData(user1);
         responseEntity = new ResponseEntity<>(responseDto,HttpStatus.OK);
-        return responseEntity;
+        String s = JSONObject.toJSONString(responseEntity.getBody());
+        return s;
     }
 
-    @RequestMapping(path="findAllByPage",method ={RequestMethod.GET,RequestMethod.POST})
-    public ResponseEntity<?> findAllByPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                           @RequestParam(value = "size", defaultValue = "5") Integer size){
+//    @RequestMapping(path="findAllByPage",method ={RequestMethod.GET,RequestMethod.POST})
+//    public ResponseEntity<?> findAllByPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+//                                           @RequestParam(value = "size", defaultValue = "5") Integer size){
+//
+//        ResponseDto responseDto = new ResponseDto();
+//        ResponseEntity<?> responseEntity = null;
+//        Page<User> allUserByPage = userService.findAllUserByPage(page-1, size);
+//        responseDto.setCode("0");
+//        responseDto.setErrorMessage("");
+//        responseDto.setData(allUserByPage);
+//
+//        responseEntity = new ResponseEntity<>(responseDto,HttpStatus.OK);
+//        return responseEntity;
+//    }
+
+
+    @RequestMapping(path="/findAllByPage",method ={RequestMethod.GET,RequestMethod.POST})
+    public String findAllByPage(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                            @RequestParam(value = "size", defaultValue = "5") Integer size){
 
         ResponseDto responseDto = new ResponseDto();
         ResponseEntity<?> responseEntity = null;
@@ -58,11 +75,13 @@ public class UserController {
         responseDto.setErrorMessage("");
         responseDto.setData(allUserByPage);
         responseEntity = new ResponseEntity<>(responseDto,HttpStatus.OK);
-        return responseEntity;
+        String s = JSONObject.toJSONString(responseEntity.getBody());
+        return s;
     }
 
+
     @RequestMapping(value = "/findUserQuery",method = {RequestMethod.GET,RequestMethod.POST})
-    public ResponseEntity<?> findUserQuery(@RequestParam(value = "page", defaultValue = "0") Integer page,
+    public String findUserQuery(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                 @RequestParam(value = "size", defaultValue = "5") Integer size, UserQuery userQuery){
 
         ResponseDto responseDto = new ResponseDto();
@@ -72,6 +91,7 @@ public class UserController {
         responseDto.setErrorMessage("");
         responseDto.setData(datas);
         responseEntity = new ResponseEntity<>(responseDto,HttpStatus.OK);
-        return responseEntity;
+        String s = JSONObject.toJSONString(responseEntity.getBody());
+        return s;
     }
 }

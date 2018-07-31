@@ -1,15 +1,19 @@
 package com.advantech.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name="user_info")
-public class User extends IdEntity {
-
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
+public class User extends IdEntity implements Serializable {
+    private static final long serialVersionUID = 4603642343377807741L;
     /**
      * 用户名称
      */
@@ -37,6 +41,10 @@ public class User extends IdEntity {
      */
     private String email;
     /**
+     * 密码
+     */
+    private String password;
+    /**
      * 该用户下的所有设备
      *
      * 关系维护端，负责多对多关系的绑定和解除
@@ -48,7 +56,6 @@ public class User extends IdEntity {
      *  关联到从表的外键名：主表中用于关联的属性名+下划线+从表的主键列名,即device_id
      *  主表就是关系维护端对应的表，从表就是关系被维护端对应的表
      */
-
     private List<Device> deviceList;
 
     public String getName() {
@@ -110,5 +117,17 @@ public class User extends IdEntity {
 
     public void setDeviceList(List<Device> deviceList) {
         this.deviceList = deviceList;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

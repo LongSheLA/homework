@@ -1,5 +1,6 @@
 package com.advantech.homework.service;
 
+import com.advantech.homework.entity.Device;
 import com.advantech.homework.entity.User;
 import com.advantech.homework.entity.UserQuery;
 import com.advantech.homework.repository.DeviceDao;
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public Page<User> findAllUserByPage(Integer page, Integer size){
         Pageable pageable = new PageRequest(page, size, Sort.Direction.ASC, "id");
-        return userDao.findAll(pageable);
+        Page<User> all = userDao.findAll(pageable);
+        return remove(all);
     }
 
     @Override
@@ -63,9 +65,33 @@ public class UserServiceImpl implements UserService{
                 return criteriaBuilder.and(list.toArray(p));
             }
         },pageable);
-        return bookPage;
+        return remove(bookPage);
+    }
+
+    @Override
+    public User verfiyUser(String name){
+        return userDao.verfiyUser(name);
+//        if(user == null){
+//            return 0;
+//        }
+//        if (!user.getPassword().equals(password)){
+//            return 1;
+//        }
+//        return 2;
+
     }
 
 
+
+
+    public Page<User> remove(Page<User> userPage){
+        for(User user:userPage){
+            List<Device> deviceList = user.getDeviceList();
+            for(Device device: deviceList){
+                device.setUserList(new ArrayList<>());
+            }
+        }
+        return userPage;
+    }
 
 }
